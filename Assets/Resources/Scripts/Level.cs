@@ -3,12 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Level : MonoBehaviour
 {
-    public List<GameObject> prefabListUnits = new List<GameObject>();
-    public GameObject prefabGroundObstacle;
-    public GameObject prefabAirObstacle;
+    [SerializeField]
+    List<GameObject> prefabListUnits = new List<GameObject>();
+    [SerializeField]
+    GameObject prefabGroundObstacle;
+    [SerializeField]
+    GameObject prefabAirObstacle;
+
+    [SerializeField]
+    Text teamText1;
+    [SerializeField]
+    Text teamText2;
 
     public Vector2Int size = new Vector2Int(80,80);
     public StaticGrid groundGrid;
@@ -20,7 +29,6 @@ public class Level : MonoBehaviour
 
     public Dictionary<int, List<Unit>> units = new Dictionary<int, List<Unit>>(); // первая переменная - номер команды. вторая - список юнитов в команде
     public Dictionary<string, UnitStats> unitStats = new Dictionary<string, UnitStats>();
-    public List<UnitStats> shownStats = new List<UnitStats>();
 
     // Start is called before the first frame update
     void Start()
@@ -31,15 +39,33 @@ public class Level : MonoBehaviour
         GenerateUnits();
     }
 
+    private void Update()
+    {
+        if (teamText1 != null) 
+            if (units.ContainsKey(0)) teamText1.text = units[0].Count.ToString();
+            else teamText1.text = "0";
+
+        if (teamText2 != null)
+            if (units.ContainsKey(1)) teamText2.text = units[1].Count.ToString();
+            else teamText2.text = "0";
+    }
+
     void LoadUnitStats()
     {
-        string unitStatsStr = File.ReadAllText(Application.dataPath + "/UnitStats.json");
-        Container statsCont = JsonUtility.FromJson<Container>(unitStatsStr);
-        shownStats = statsCont.list;
+        string filePath = "SetupData/UnitStats";
+        TextAsset targetFile = Resources.Load<TextAsset>(filePath);
+        Container statsCont = JsonUtility.FromJson<Container>(targetFile.text);
         for (int i = 0; i < statsCont.list.Count; i++)
         {
             unitStats.Add(statsCont.list[i].unitName, statsCont.list[i]);
         }
+        /*
+        string unitStatsStr = File.ReadAllText(Application.dataPath + "/UnitStats.json");
+        Container statsCont = JsonUtility.FromJson<Container>(unitStatsStr);
+        for (int i = 0; i < statsCont.list.Count; i++)
+        {
+            unitStats.Add(statsCont.list[i].unitName, statsCont.list[i]);
+        }*/
     }
 
     void GeneratePathMaps()
@@ -137,6 +163,7 @@ public class Level : MonoBehaviour
         GameObject newUnitObj = Instantiate(prefabListUnits[unitType], position, Quaternion.identity);
         Unit unit = newUnitObj.GetComponent<Unit>();
         unit.team = team;
+        unit.transform.SetParent(this.transform);
         if (team == 0) unit.color = Color.green;
         if (team == 1) unit.color = Color.red;
         if (team == 2) unit.color = Color.blue;

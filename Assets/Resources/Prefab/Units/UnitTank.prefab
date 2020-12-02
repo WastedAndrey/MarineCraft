@@ -70,8 +70,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8616325173124145328}
-  - component: {fileID: 8616325173124145331}
+  - component: {fileID: 7764105755634701615}
   - component: {fileID: -2757498658204853534}
+  - component: {fileID: 3989028559342706568}
   m_Layer: 0
   m_Name: UnitTank
   m_TagString: Untagged
@@ -96,7 +97,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8616325173124145331
+--- !u!114 &7764105755634701615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +106,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8616325173124145341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4849301e10b4b704ea19cab564428fde, type: 3}
+  m_Script: {fileID: 11500000, guid: 70a5c48699919864fb27256e4f3ff2cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   modelObj: {fileID: 1220869378638228217}
@@ -129,7 +130,7 @@ MonoBehaviour:
     airMissileSpeed: 0
     defense: 0
     moveSpeed: 0
-  preafabLandMissile: {fileID: 5485192342954217740, guid: 5812f46811d13ca43a409af8c426c1f9,
+  preafabLandMissile: {fileID: 3990091813033248941, guid: 9f687938383c6114aa2e1906ef1462e3,
     type: 3}
   prefabAirMissile: {fileID: 0}
   movementType: 0
@@ -154,6 +155,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FindEnemyCooldown: 2
+--- !u!95 &3989028559342706568
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616325173124145341}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bb2947f477c67545a1109a1638e001d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &3735746804962297033
 PrefabInstance:
   m_ObjectHideFlags: 0

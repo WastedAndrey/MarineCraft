@@ -70,11 +70,15 @@ public class Unit : MonoBehaviour
         }
     }
 
-    protected void Start()
+    protected virtual void Awake()
     {
     }
 
-    protected void Update()
+    protected virtual void Start()
+    {
+    }
+
+    protected virtual void Update()
     {
         UpdateAttack();
         UpdateMovement();
@@ -253,20 +257,20 @@ public class Unit : MonoBehaviour
         {
             case UnitMovementType.Ground:
                 {
-                    AttackGround();
+                    TryAttackGround();
                     break;
                 }
                
             case UnitMovementType.Air:
                 {
-                    AttackAir();
+                    TryAttackAir();
                     break;
                 }
             default: break;
         }  
     }
 
-    protected virtual void AttackGround()
+    protected virtual void TryAttackGround()
     {
         if (landAttackTimer > 0) return;
 
@@ -282,27 +286,31 @@ public class Unit : MonoBehaviour
         // If distance is ok - makes attack
         if (dist <= stats.landAttackDistance)
         {
-            Stop();
-
-            landAttackTimer = 1f / stats.landAttackSpeed;
-            Vector2 direction = targetOfAttack.Position - Position;
-            angle = MyMaths.GetAngle(direction);
-
-            if (preafabLandMissile == null)
-                targetOfAttack.RecieveDamage(stats.landDamage);
-            else
-            {
-                float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
-                Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
-                GameObject newMissile = Instantiate(preafabLandMissile, missileSpawnPos.transform.position, quat);
-                missiles.Add(newMissile);
-                newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.landDamage, stats.landMissileSpeed);
-            }
-
+            MakeAttackGround();
         }
     }
 
-    protected virtual void AttackAir()
+    protected virtual void MakeAttackGround()
+    {
+        Stop();
+
+        landAttackTimer = 1f / stats.landAttackSpeed;
+        Vector2 direction = targetOfAttack.Position - Position;
+        angle = MyMaths.GetAngle(direction);
+
+        if (preafabLandMissile == null)
+            targetOfAttack.RecieveDamage(stats.landDamage);
+        else
+        {
+            float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
+            Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject newMissile = Instantiate(preafabLandMissile, missileSpawnPos.transform.position, quat);
+            missiles.Add(newMissile);
+            newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.landDamage, stats.landMissileSpeed);
+        }
+    }
+
+    protected virtual void TryAttackAir()
     {
         if (airAttackTimer > 0) return;
 
@@ -318,22 +326,27 @@ public class Unit : MonoBehaviour
         // If distance is ok - makes attack
         if (dist <= stats.airAttackDistance)
         {
-            Stop();
+            MakeAttackAir();
+        }
+    }
 
-            airAttackTimer = 1f / stats.airAttackSpeed;
-            Vector2 direction = targetOfAttack.Position - Position;
-            angle = MyMaths.GetAngle(direction);
+    protected virtual void MakeAttackAir()
+    {
+        Stop();
 
-            if (prefabAirMissile == null)
-                targetOfAttack.RecieveDamage(stats.airDamage);
-            else
-            {
-                float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
-                Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
-                GameObject newMissile = Instantiate(prefabAirMissile, missileSpawnPos.transform.position, quat);
-                missiles.Add(newMissile);
-                newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.airDamage, stats.airMissileSpeed);
-            }
+        airAttackTimer = 1f / stats.airAttackSpeed;
+        Vector2 direction = targetOfAttack.Position - Position;
+        angle = MyMaths.GetAngle(direction);
+
+        if (prefabAirMissile == null)
+            targetOfAttack.RecieveDamage(stats.airDamage);
+        else
+        {
+            float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
+            Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
+            GameObject newMissile = Instantiate(prefabAirMissile, missileSpawnPos.transform.position, quat);
+            missiles.Add(newMissile);
+            newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.airDamage, stats.airMissileSpeed);
         }
     }
 
