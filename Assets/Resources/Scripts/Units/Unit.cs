@@ -10,6 +10,8 @@ public class Unit : MonoBehaviour
     [SerializeField]
     GameObject hpBarObj; // ссылка на хп бар над головой
     [SerializeField]
+    GameObject missileAnchor; // ссылка на объект, который нужен для поворота позиции вылета снарядов
+    [SerializeField]
     GameObject missileSpawnPos; // ссылка на объект, из позиции которого будут вылетать снаряды
     [SerializeField]
     GameObject prefabUnitDeathExplosion; // префаб взрыва после смерти
@@ -76,7 +78,7 @@ public class Unit : MonoBehaviour
     {
         UpdateAttack();
         UpdateMovement();
-        UpdateModel();
+        UpdateChildren();
     }
 
 
@@ -87,6 +89,7 @@ public class Unit : MonoBehaviour
     public virtual void Init(Level level)
     {
         this.level = level;
+        this.stats = level.GetStats(unitName);
         this.hpBar = hpBarObj.GetComponent<HPBar>();
         this.hpBar.Init(this);
         this.unitAI = this.GetComponent<UnitAI>();
@@ -263,43 +266,7 @@ public class Unit : MonoBehaviour
         }  
     }
 
-
     protected virtual void AttackGround()
-    {
-        if (airAttackTimer > 0) return;
-
-        float dist = Vector2.Distance(PositionInt, targetOfAttack.PositionInt);
-
-        // If distance to target is more then distance of attack - tryes to move to target;
-        if (dist > stats.airAttackDistance && pathfindTimer <= 0)
-        {
-            MoveTo(targetOfAttack.PositionInt);
-            pathfindTimer = 1;
-        }
-
-        // If distance is ok - makes attack
-        if (dist <= stats.airAttackDistance)
-        {
-            Stop();
-
-            airAttackTimer = 1f / stats.airAttackSpeed;
-            Vector2 direction = targetOfAttack.Position - Position;
-            angle = MyMaths.GetAngle(direction);
-
-            if (prefabAirMissile == null)
-                targetOfAttack.RecieveDamage(stats.airDamage);
-            else
-            {
-                float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
-                Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
-                GameObject newMissile = Instantiate(prefabAirMissile, missileSpawnPos.transform.position, quat);
-                missiles.Add(newMissile);
-                newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.airDamage, stats.airMissileSpeed);
-            }
-        }
-    }
-
-    protected virtual void AttackAir()
     {
         if (landAttackTimer > 0) return;
 
@@ -335,12 +302,50 @@ public class Unit : MonoBehaviour
         }
     }
 
+    protected virtual void AttackAir()
+    {
+        if (airAttackTimer > 0) return;
+
+        float dist = Vector2.Distance(PositionInt, targetOfAttack.PositionInt);
+
+        // If distance to target is more then distance of attack - tryes to move to target;
+        if (dist > stats.airAttackDistance && pathfindTimer <= 0)
+        {
+            MoveTo(targetOfAttack.PositionInt);
+            pathfindTimer = 1;
+        }
+
+        // If distance is ok - makes attack
+        if (dist <= stats.airAttackDistance)
+        {
+            Stop();
+
+            airAttackTimer = 1f / stats.airAttackSpeed;
+            Vector2 direction = targetOfAttack.Position - Position;
+            angle = MyMaths.GetAngle(direction);
+
+            if (prefabAirMissile == null)
+                targetOfAttack.RecieveDamage(stats.airDamage);
+            else
+            {
+                float angle = MyMaths.GetAngle(Position, targetOfAttack.Position);
+                Quaternion quat = Quaternion.Euler(new Vector3(0, 0, angle));
+                GameObject newMissile = Instantiate(prefabAirMissile, missileSpawnPos.transform.position, quat);
+                missiles.Add(newMissile);
+                newMissile.GetComponent<Missile>().Init(level, this, targetOfAttack, stats.airDamage, stats.airMissileSpeed);
+            }
+        }
+    }
+
+    
+
     /// <summary>
-    /// Updates unit's 3d model angle
+    /// Updates unit's 3d model and missile anchor angle
     /// </summary>
-    protected void UpdateModel()
+    protected void UpdateChildren()
     {
         modelObj.transform.rotation = Quaternion.Euler(0, 0, angle);
+        missileAnchor.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
     /// <summary>

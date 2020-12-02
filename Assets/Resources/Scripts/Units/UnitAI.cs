@@ -24,7 +24,6 @@ public class UnitAI : MonoBehaviour
 
     void FindEnemies()
     {
-        if (unit.targetOfAttack != null) return;
         if (findEnemyTimer > 0)
         {
             findEnemyTimer -= Time.deltaTime;

@@ -27,6 +27,37 @@ Transform:
   m_LocalPosition: {x: 0.75, y: 0, z: -0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
+  m_Father: {fileID: 1116527795713040285}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8452712279253365288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1116527795713040285}
+  m_Layer: 0
+  m_Name: MissileAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1116527795713040285
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8452712279253365288}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3955160752808015525}
   m_Father: {fileID: 8616325173124145328}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -61,7 +92,7 @@ Transform:
   m_Children:
   - {fileID: 3079514882466726261}
   - {fileID: 1220869378638228218}
-  - {fileID: 3955160752808015525}
+  - {fileID: 1116527795713040285}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -79,25 +110,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modelObj: {fileID: 1220869378638228217}
   hpBarObj: {fileID: 7761112117953159377}
+  missileAnchor: {fileID: 8452712279253365288}
   missileSpawnPos: {fileID: 5284830472622988159}
-  unitDeathExplosion: {fileID: 5816748840669583358, guid: bc53f3aa49a1f4c4d80fc11c5245577e,
+  prefabUnitDeathExplosion: {fileID: 5816748840669583358, guid: bc53f3aa49a1f4c4d80fc11c5245577e,
     type: 3}
-  healthMax: 100
-  healthCurrent: 100
-  landDamage: 25
-  landAttackSpeed: 0.5
-  landAttackDistance: 3
-  landMissile: {fileID: 4808614440714449678, guid: 128a58725ec9fe748abb10dcfa9ddc00,
+  unitName: tank
+  stats:
+    unitName: 
+    healthMax: 0
+    healthCurrent: 0
+    landDamage: 0
+    landAttackSpeed: 0
+    landAttackDistance: 0
+    landMissileSpeed: 0
+    airDamage: 0
+    airAttackSpeed: 0
+    airAttackDistance: 0
+    airMissileSpeed: 0
+    defense: 0
+    moveSpeed: 0
+  preafabLandMissile: {fileID: 5485192342954217740, guid: 5812f46811d13ca43a409af8c426c1f9,
     type: 3}
-  landMissileSpeed: 3
-  airDamage: 10
-  airAttackSpeed: 1
-  airAttackDistance: 5
-  airMissile: {fileID: 4808614440714449678, guid: 128a58725ec9fe748abb10dcfa9ddc00,
-    type: 3}
-  airMissileSpeed: 2
-  defense: 1
-  moveSpeed: 10
+  prefabAirMissile: {fileID: 0}
   movementType: 0
   attackType: 0
   team: 0
@@ -107,7 +141,6 @@ MonoBehaviour:
   moving: 0
   angle: 0
   missiles: []
-  pathINFO: []
 --- !u!114 &-2757498658204853534
 MonoBehaviour:
   m_ObjectHideFlags: 0

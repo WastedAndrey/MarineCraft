@@ -19,17 +19,27 @@ public class Level : MonoBehaviour
     List<GameObject> obstacleObjects = new List<GameObject>();
 
     public Dictionary<int, List<Unit>> units = new Dictionary<int, List<Unit>>(); // первая переменная - номер команды. вторая - список юнитов в команде
-    private Dictionary<string, string> unitStats = new Dictionary<string, string>();
+    public Dictionary<string, UnitStats> unitStats = new Dictionary<string, UnitStats>();
+    public List<UnitStats> shownStats = new List<UnitStats>();
 
     // Start is called before the first frame update
     void Start()
     {
+        LoadUnitStats();
         GeneratePathMaps();
         GenerateObstacles();
         GenerateUnits();
+    }
 
+    void LoadUnitStats()
+    {
         string unitStatsStr = File.ReadAllText(Application.dataPath + "/UnitStats.json");
-        List<UnitStats> stats = JsonUtility.FromJson<List<UnitStats>>(unitStatsStr);
+        Container statsCont = JsonUtility.FromJson<Container>(unitStatsStr);
+        shownStats = statsCont.list;
+        for (int i = 0; i < statsCont.list.Count; i++)
+        {
+            unitStats.Add(statsCont.list[i].unitName, statsCont.list[i]);
+        }
     }
 
     void GeneratePathMaps()
@@ -110,7 +120,7 @@ public class Level : MonoBehaviour
             CreateUnit(1, pos);
         }
 
-
+        /*
         List<UnitStats> stats = new List<UnitStats>();
         stats.Add(unitObjects[0].GetComponent<Unit>().stats);
         stats.Add(unitObjects[0].GetComponent<Unit>().stats);
@@ -118,7 +128,7 @@ public class Level : MonoBehaviour
         string JsonString = JsonUtility.ToJson(container, true);
         print(JsonString);
         File.WriteAllText(Application.dataPath + "/UnitStats.json", JsonString);
-        print(Application.dataPath + "/UnitStats.json");
+        print(Application.dataPath + "/UnitStats.json");*/
     }
 
     void CreateUnit(int team, Vector2 position)
@@ -169,6 +179,15 @@ public class Level : MonoBehaviour
         }
         unitObjects.Clear();
         units.Clear();
+
+        GenerateUnits();
+    }
+
+    public UnitStats GetStats(string unitName)
+    {
+        UnitStats result = new UnitStats();
+        if (unitStats.ContainsKey(unitName)) result = unitStats[unitName];
+        return result;
     }
 }
 

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5343903563048426003}
   m_LocalRotation: {x: 0, y: -0, z: 0.7071068, w: -0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.2, z: 0.05}
+  m_LocalScale: {x: 0.1, y: 0.3, z: 0.1}
   m_Children: []
   m_Father: {fileID: 6610015846226164070}
   m_RootOrder: 0
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 6610015846226164070}
   - component: {fileID: 966849906511044844}
   m_Layer: 0
-  m_Name: MissileLazer
+  m_Name: Lazer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -23,5 +23,4 @@ public struct UnitStats
     public float defense;
     public float moveSpeed;
 
-
 }
