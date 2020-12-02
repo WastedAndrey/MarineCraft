@@ -1,0 +1,34 @@
+{
+    "list": [
+        {
+            "unitName": "",
+            "healthMax": 0.0,
+            "healthCurrent": 0.0,
+            "landDamage": 0.0,
+            "landAttackSpeed": 0.0,
+            "landAttackDistance": 0.0,
+            "landMissileSpeed": 0.0,
+            "airDamage": 0.0,
+            "airAttackSpeed": 0.0,
+            "airAttackDistance": 0.0,
+            "airMissileSpeed": 0.0,
+            "defense": 0.0,
+            "moveSpeed": 0.0
+        },
+        {
+            "unitName": "",
+            "healthMax": 0.0,
+            "healthCurrent": 0.0,
+            "landDamage": 0.0,
+            "landAttackSpeed": 0.0,
+            "landAttackDistance": 0.0,
+            "landMissileSpeed": 0.0,
+            "airDamage": 0.0,
+            "airAttackSpeed": 0.0,
+            "airAttackDistance": 0.0,
+            "airMissileSpeed": 0.0,
+            "defense": 0.0,
+            "moveSpeed": 0.0
+        }
+    ]
+}
