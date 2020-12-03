@@ -6,27 +6,27 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [SerializeField]
-    GameObject modelObj; // ссылка на объект с 3д моделью
+    protected GameObject modelObj; // ссылка на объект с 3д моделью
     [SerializeField]
-    GameObject hpBarObj; // ссылка на хп бар над головой
+    protected GameObject hpBarObj; // ссылка на хп бар над головой
     [SerializeField]
-    GameObject missileAnchor; // ссылка на объект, который нужен для поворота позиции вылета снарядов
+    protected GameObject missileAnchor; // ссылка на объект, который нужен для поворота позиции вылета снарядов
     [SerializeField]
-    GameObject missileSpawnPos; // ссылка на объект, из позиции которого будут вылетать снаряды
+    protected GameObject missileSpawnPos; // ссылка на объект, из позиции которого будут вылетать снаряды
     [SerializeField]
-    GameObject prefabUnitDeathExplosion; // префаб взрыва после смерти
+    protected GameObject prefabUnitDeathExplosion; // префаб взрыва после смерти
 
-    HPBar hpBar; // ссылка на скрипт хп бара
+    protected HPBar hpBar; // ссылка на скрипт хп бара
 
-    Level level; // ссылка на уровень, к которому принадлежит юнит
-    UnitAI unitAI; //ссылка на скрип ИИ
+    protected Level level; // ссылка на уровень, к которому принадлежит юнит
+    protected UnitAI unitAI; //ссылка на скрип ИИ
 
     public string unitName; // должно быть уникальным
     public UnitStats stats; // статы юнита, которые можно упаковать в Json
     public GameObject preafabLandMissile; // префаб снаряда. Если он есть, будет стрелять снарядами по наземным целям
     public GameObject prefabAirMissile; // префаб снаряда. Если он есть, будет стрелять снарядами по воздушным целям
-    float landAttackTimer; // таймер кулдауна атаки
-    float airAttackTimer; // таймер кулдауна атаки
+    protected float landAttackTimer; // таймер кулдауна атаки
+    protected float airAttackTimer; // таймер кулдауна атаки
 
 
     public UnitMovementType movementType; // тип передвижения

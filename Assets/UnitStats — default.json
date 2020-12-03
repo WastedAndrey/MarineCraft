@@ -17,8 +17,8 @@
       },
       {
         "unitName": "glider",
-        "healthMax": 50.0,
-        "healthCurrent": 50.0,
+        "healthMax": 60.0,
+        "healthCurrent": 60.0,
         "landDamage": 10.0,
         "landAttackSpeed": 1.0,
         "landAttackDistance": 1.0,

@@ -99,10 +99,8 @@ MonoBehaviour:
     airMissileSpeed: 0
     defense: 0
     moveSpeed: 0
-  preafabLandMissile: {fileID: 4808614440714449678, guid: 128a58725ec9fe748abb10dcfa9ddc00,
-    type: 3}
-  prefabAirMissile: {fileID: 4808614440714449678, guid: 128a58725ec9fe748abb10dcfa9ddc00,
-    type: 3}
+  preafabLandMissile: {fileID: 0}
+  prefabAirMissile: {fileID: 0}
   movementType: 1
   attackType: 2
   team: 0
@@ -149,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7056771888307473951}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.75, y: 0, z: -0.7}
+  m_LocalPosition: {x: 0.75, y: 0, z: -0.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2866393729479903997}
@@ -175,7 +173,7 @@ PrefabInstance:
     - target: {fileID: 1675194089234416214, guid: 855f16cdab6c2774e9e895a08a1dceb5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -1.4
       objectReference: {fileID: 0}
     - target: {fileID: 1675194089234416214, guid: 855f16cdab6c2774e9e895a08a1dceb5,
         type: 3}
@@ -261,7 +259,7 @@ PrefabInstance:
     - target: {fileID: 9036808423330652694, guid: f8683de4bf455ce48aca2b6cbbd47b3d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.4
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 9036808423330652694, guid: f8683de4bf455ce48aca2b6cbbd47b3d,
         type: 3}

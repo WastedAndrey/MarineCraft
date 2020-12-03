@@ -12,7 +12,7 @@ public class MessageUI : MonoBehaviour
     float hideTimer = 0;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         animator = this.GetComponent<Animator>();
     }
