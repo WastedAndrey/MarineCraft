@@ -48,7 +48,6 @@ public class Swipe : MonoBehaviour
         }
     }
 
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -60,22 +59,21 @@ public class Swipe : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Vector3 pos = touch.position;
-            pos.z -= 10;
+            Vector2 pos = touch.position;
 
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                     points.Clear();
                     swipePhase = SwipePhase.Began;
-                    points.Add(Camera.main.ScreenToWorldPoint(pos));
+                    points.Add(pos);
                     break;
                 case TouchPhase.Moved:
                     swipePhase = SwipePhase.Moved;
-                    points.Add(Camera.main.ScreenToWorldPoint(pos));
+                    points.Add(pos);
                     break;
                 case TouchPhase.Ended:
-                    points.Add(Camera.main.ScreenToWorldPoint(pos));
+                    points.Add(pos);
                     swipePhase = SwipePhase.Ended;
                     break;
             }

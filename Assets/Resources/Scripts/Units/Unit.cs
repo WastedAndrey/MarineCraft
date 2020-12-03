@@ -157,6 +157,8 @@ public class Unit : MonoBehaviour
             GameObject explosion = Instantiate(prefabUnitDeathExplosion, this.transform.position, Quaternion.identity);
             explosion.GetComponent<Explosion>().Init(level);
         }
+        AudioManager.Instance.PlayExplosion();
+
         Destroy(this.gameObject);
     }
 

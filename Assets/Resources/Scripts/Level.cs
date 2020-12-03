@@ -5,6 +5,13 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum LevelStatus
+{ 
+    inGame,
+    Win,
+    Loose
+}
+
 public class Level : MonoBehaviour
 {
     [SerializeField]
@@ -14,60 +21,64 @@ public class Level : MonoBehaviour
     [SerializeField]
     GameObject prefabAirObstacle;
 
-    [SerializeField]
-    Text teamText1;
-    [SerializeField]
-    Text teamText2;
+    public Vector2Int size = new Vector2Int(80,80); // размер уровня. в зависимости от него всё будет генериться
+    public StaticGrid groundGrid; // сетка поиска пути для наземных юнитов
+    public StaticGrid airGrid; // сетка поиска пути для воздушных юнитов
+    public int unitsNumber = 0; // кол-во юнитов за каждую из сторон
+    public LevelStatus levelStatus = LevelStatus.inGame;
 
-    public Vector2Int size = new Vector2Int(80,80);
-    public StaticGrid groundGrid;
-    public StaticGrid airGrid;
-    public int unitsNumber = 0;
-
-    List<GameObject> unitObjects = new List<GameObject>();
-    List<GameObject> obstacleObjects = new List<GameObject>();
+    List<GameObject> unitObjects = new List<GameObject>(); // список юнитов
+    List<GameObject> obstacleObjects = new List<GameObject>(); // список препятствий
 
     public Dictionary<int, List<Unit>> units = new Dictionary<int, List<Unit>>(); // первая переменная - номер команды. вторая - список юнитов в команде
-    public Dictionary<string, UnitStats> unitStats = new Dictionary<string, UnitStats>();
+    public Dictionary<string, UnitStats> unitStats = new Dictionary<string, UnitStats>(); // словарь содержащий статы юнитов по имени юнита
 
     // Start is called before the first frame update
     void Start()
     {
         LoadUnitStats();
-        GeneratePathMaps();
-        GenerateObstacles();
-        GenerateUnits();
+        Restart();
     }
 
     private void Update()
     {
-        if (teamText1 != null) 
-            if (units.ContainsKey(0)) teamText1.text = units[0].Count.ToString();
-            else teamText1.text = "0";
+        if (levelStatus == LevelStatus.inGame) UpdateWinLoose();
 
-        if (teamText2 != null)
-            if (units.ContainsKey(1)) teamText2.text = units[1].Count.ToString();
-            else teamText2.text = "0";
     }
 
+    void UpdateWinLoose()
+    {
+        if (GetUnitsCount(1) == 0)
+        {
+            levelStatus = LevelStatus.Win;
+            AudioManager.Instance.PlayWin();
+            MessageUI.RecieveMessage("Вы победили!");
+        }
+        if (GetUnitsCount(0) == 0)
+        {
+            levelStatus = LevelStatus.Loose;
+            AudioManager.Instance.PlayLoose();
+            MessageUI.RecieveMessage("Вы проиграли :(");
+        }
+    }
+
+    /// <summary>
+    /// Метод подгружает статы юнитов из Json в словарь 
+    /// </summary>
     void LoadUnitStats()
     {
         string filePath = "SetupData/UnitStats";
         TextAsset targetFile = Resources.Load<TextAsset>(filePath);
-        Container statsCont = JsonUtility.FromJson<Container>(targetFile.text);
+        StatsContainer statsCont = JsonUtility.FromJson<StatsContainer>(targetFile.text);
         for (int i = 0; i < statsCont.list.Count; i++)
         {
             unitStats.Add(statsCont.list[i].unitName, statsCont.list[i]);
         }
-        /*
-        string unitStatsStr = File.ReadAllText(Application.dataPath + "/UnitStats.json");
-        Container statsCont = JsonUtility.FromJson<Container>(unitStatsStr);
-        for (int i = 0; i < statsCont.list.Count; i++)
-        {
-            unitStats.Add(statsCont.list[i].unitName, statsCont.list[i]);
-        }*/
     }
 
+    /// <summary>
+    /// Создаёт карты путей для юнитов
+    /// </summary>
     void GeneratePathMaps()
     {
         bool[][] groundMatrix = new bool[size.x][];
@@ -99,7 +110,10 @@ public class Level : MonoBehaviour
         airGrid = new StaticGrid(size.x, size.y, airMatrix);
     }
 
-    public void GenerateObstacles()
+    /// <summary>
+    /// Создает препятствия в зависимости от карт путей
+    /// </summary>
+    void GenerateObstacles()
     {
         for (int i = 0; i < obstacleObjects.Count; i++)
         {
@@ -130,6 +144,9 @@ public class Level : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Создаёт юнитов
+    /// </summary>
     void GenerateUnits()
     {
         if (prefabListUnits.Count == 0) return;
@@ -145,18 +162,13 @@ public class Level : MonoBehaviour
             Vector2 pos = new Vector2(Random.Range(size.x - 11, size.x - 1), Random.Range(0, size.y - 1));
             CreateUnit(1, pos);
         }
-
-        /*
-        List<UnitStats> stats = new List<UnitStats>();
-        stats.Add(unitObjects[0].GetComponent<Unit>().stats);
-        stats.Add(unitObjects[0].GetComponent<Unit>().stats);
-        Container container = new Container(stats);
-        string JsonString = JsonUtility.ToJson(container, true);
-        print(JsonString);
-        File.WriteAllText(Application.dataPath + "/UnitStats.json", JsonString);
-        print(Application.dataPath + "/UnitStats.json");*/
     }
 
+    /// <summary>
+    /// Создает одного случайного юнита для выбранной команды
+    /// </summary>
+    /// <param name="team"></param>
+    /// <param name="position"></param>
     void CreateUnit(int team, Vector2 position)
     {
         int unitType = Random.Range(0, prefabListUnits.Count);
@@ -170,6 +182,10 @@ public class Level : MonoBehaviour
         InitUnit(unit);
     }
 
+    /// <summary>
+    /// Инициализирует созданного юнита и добавляет его в словарь и список юнитов
+    /// </summary>
+    /// <param name="unit"></param>
     void InitUnit(Unit unit)
     {
         unit.Init(this);
@@ -182,14 +198,24 @@ public class Level : MonoBehaviour
         units[unit.team].Add(unit);
     }
 
+    /// <summary>
+    /// Удаляет юнита из словаря и списка
+    /// </summary>
+    /// <param name="unit"></param>
     void RemoveUnit(Unit unit)
     {
         unitObjects.Remove(unit.gameObject);
         units[unit.team].Remove(unit);
     }
 
-    public void Recreate()
+    /// <summary>
+    /// Перезапускает уровень
+    /// </summary>
+    public void Restart()
     {
+        levelStatus = LevelStatus.inGame;
+        MessageUI.RecieveMessage("Бой начался!");
+
         GeneratePathMaps();
         
         for (int i = 0; i < obstacleObjects.Count; i++)
@@ -210,21 +236,22 @@ public class Level : MonoBehaviour
         GenerateUnits();
     }
 
+    /// <summary>
+    /// Возвращает нужные статы из словаря по названию юнита
+    /// </summary>
+    /// <param name="unitName"></param>
+    /// <returns></returns>
     public UnitStats GetStats(string unitName)
     {
         UnitStats result = new UnitStats();
         if (unitStats.ContainsKey(unitName)) result = unitStats[unitName];
         return result;
     }
-}
 
-public struct Container
-{
-    [SerializeField]
-    public List<UnitStats> list;
-
-    public Container(List<UnitStats> list)
+    public int GetUnitsCount(int team)
     {
-        this.list = list;
+        if (units.ContainsKey(team)) return units[team].Count;
+        else return 0;
     }
 }
+

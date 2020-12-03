@@ -55,7 +55,10 @@ public class CameraScript : MonoBehaviour
         if (Swipe.SwipePhase == SwipePhase.Moved)
         {
             Vector2 pos = Swipe.VectorLastFrame;
-            this.transform.position = this.transform.position / 30  * cameraSpeed + (Vector3)pos;
+            Vector3 newPos = this.transform.position - (Vector3)pos / 450 * cameraSpeed;
+            newPos.x = Mathf.Clamp(newPos.x, 0, 80);
+            newPos.y = Mathf.Clamp(newPos.y, -10, 70);
+            this.transform.position = newPos;
         }
     }
 

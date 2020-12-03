@@ -24,6 +24,10 @@ public class HPBar : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Хп бар создает нужное число нодов в зависимости от макс хп юнита
+    /// </summary>
+    /// <param name="owner"></param>
     public void Init(Unit owner)
     {
         for (int i = 0; i < nodes.Count; i++)

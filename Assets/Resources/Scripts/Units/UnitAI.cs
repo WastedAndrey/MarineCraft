@@ -10,6 +10,10 @@ public class UnitAI : MonoBehaviour
     public float FindEnemyCooldown = 2;
     float findEnemyTimer = 0;
 
+    private void Awake()
+    {
+        findEnemyTimer = Random.Range(0f, FindEnemyCooldown);
+    }
 
     private void Update()
     {
@@ -22,6 +26,13 @@ public class UnitAI : MonoBehaviour
         this.unit = unit;
     }
 
+    /// <summary>
+    /// Раз в несколько секунд ищет ближайшего врага. Потом ищет путь к нему. 
+    /// По хорошему для таких вещей нужна оптимизация(мб очередь запросов, больше условий поиска, 
+    /// QuadTree, что бы перебирать тех, кто недалеко, при этом не считать расстояние от каждого к каждому каждый фрейм и т.п.). 
+    /// В данном случае я сделал, что бы эти поиски просто были не слишком часто и
+    /// слегка распределялось по времени случайно, что бы не было лаг спайков.
+    /// </summary>
     void FindEnemies()
     {
         if (findEnemyTimer > 0)
@@ -31,7 +42,7 @@ public class UnitAI : MonoBehaviour
         }
         
 
-        findEnemyTimer = FindEnemyCooldown;
+        findEnemyTimer = FindEnemyCooldown * 0.5f + Random.Range(0f, FindEnemyCooldown);
         float dist = -1;
         Unit target = null;
         //Проходит по словарю с юнитами разных команд(свою команду не перебирает). Перебирает их и находит ближайшего.
@@ -52,7 +63,7 @@ public class UnitAI : MonoBehaviour
             }
         }
 
-        if (target != null)
+        if (target != null && unit.targetOfAttack != target)
             unit.Attack(target);
     }
 }
